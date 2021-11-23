@@ -21,6 +21,12 @@ const GamePage = () => {
         gravity:  false,
         debug: false,
       },
+      checkCollision: {
+          up: true,
+          down: true,  
+          left: true,
+          right: true
+      },
     },
     scene: [GameScene],
     //  parent DOM element into which the canvas created by the renderer will be injected.

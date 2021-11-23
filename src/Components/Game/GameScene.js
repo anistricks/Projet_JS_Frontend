@@ -35,20 +35,26 @@ class GameScene extends Phaser.Scene {
     this.player.body.velocity.setTo(0,0);
 
     if (this.cursors.left.isDown) {
-      this.player.setVelocityX(-160);
-    } else if (this.cursors.right.isDown) {
-      this.player.setVelocityX(160);
+        this.player.setVelocityX(-300);
+        
+    } 
+    else if (this.cursors.right.isDown) {
+        this.player.setVelocityX(300);
+
     } else if(this.cursors.up.isDown){
-      this.player.setVelocityY(-160);
+        this.player.setVelocityY(-300);
+           
     }
-      else if(this.cursors.down.isDown){
-      this.player.setVelocityY(160);
-    }
+    else if(this.cursors.down.isDown){
+        this.player.setVelocityY(300);
+    }   
   }
 
   //Create and add player sprite
   createPlayer() {
     const player = this.physics.add.sprite(100,450,PLAYER_KEY);
+    //world collision
+    player.body.collideWorldBounds=true;
     return player;
   }
 
