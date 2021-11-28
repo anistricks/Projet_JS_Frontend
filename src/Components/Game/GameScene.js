@@ -1,38 +1,36 @@
 import Phaser from "phaser";
 const PLAYER_KEY = "player";
-const BULLET = "bullet";
+const LASER = "laser";
 import skyAsset from "../../assets/sky.png";
 import playerAsset from "../../assets/star.png";
 import bulletAsset from "../../assets/bomb.png";
+import laserSpawner from "./LaserSpawner.js";
 
 class GameScene extends Phaser.Scene {
   constructor() {
     super("game-scene");
     this.player = undefined;
     this.cursors = undefined;
+    this.laserSpawner = undefined;
     this.gameOver = false;
-    this.bullets = undefined;
+    this.bulletTime = 0;
+
   }
+
   preload() {
     this.load.image("sky", skyAsset);
     this.load.image(PLAYER_KEY,playerAsset);
-    this.load.image(BULLET,bulletAsset);
+    this.load.image(LASER,bulletAsset);
   }
 
 
   //Load player and background
   create(){
 
-    this.bullets = game.add.group();
-    /*this.bullets.enableBody = true;
-    this.bullets.createMultuple(30, BULLET);
-    this.bullets.setAll('anchor.x', 0.5);
-    this.bullets.setAll('anchor.y', 1);
-    this.bullets.setAll('outOfBoundsKill', true);
-    this.bullets.setAll('checkWorldBounds', true);*/
+  
     this.add.sprite(400, 300, "sky");
     this.player = this.createPlayer();
-
+    this.laserSpawner = new laserSpawner(this);
     this.cursors = this.input.keyboard.createCursorKeys();
 
   
@@ -59,7 +57,11 @@ class GameScene extends Phaser.Scene {
     }
     else if(this.cursors.down.isDown){
         this.player.setVelocityY(300);
-    }   
+    }  
+    if(this.cursors.space.isDown){
+      this.shootLaser();
+    }
+    
   }
 
   //Create and add player sprite
@@ -70,10 +72,11 @@ class GameScene extends Phaser.Scene {
     return player;
   }
 
-
+  shootLaser(){
+    this.laserSpawner.fireLaser(this.player.x, this.player.y-20);
   
 
-
+  }
 }
 
 export default GameScene;
