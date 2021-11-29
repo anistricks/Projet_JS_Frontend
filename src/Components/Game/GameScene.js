@@ -59,8 +59,8 @@ class GameScene extends Phaser.Scene {
         this.player.setVelocityY(300);
     }  
     if(this.cursors.space.isDown){
-      this.shootLaser();
-    }
+        this.shootLaser();
+    } 
     
   }
 
@@ -73,9 +73,10 @@ class GameScene extends Phaser.Scene {
   }
 
   shootLaser(){
-    this.laserSpawner.fireLaser(this.player.x, this.player.y-20);
-  
-
+    if(this.time.now > this.bulletTime){
+      this.laserSpawner.fireLaser(this.player.x, this.player.y-20);
+      this.bulletTime = this.time.now + 200;
+    }
   }
 }
 
