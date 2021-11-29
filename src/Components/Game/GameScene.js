@@ -1,10 +1,15 @@
 import Phaser from "phaser";
 const PLAYER_KEY = "player";
-const LASER = "laser";
+const LASER_KEY = "laser";
+const ENEMY_KEY = 'enemy';
 import skyAsset from "../../assets/sky.png";
 import playerAsset from "../../assets/star.png";
-import bulletAsset from "../../assets/bomb.png";
+import laserAsset from "../../assets/bomb.png";
+import enemyAsset from "../../assets/enemy.png";
+
 import laserSpawner from "./LaserSpawner.js";
+import enemySpawner from "./EnemySpawner.js";
+
 
 class GameScene extends Phaser.Scene {
   constructor() {
@@ -12,6 +17,7 @@ class GameScene extends Phaser.Scene {
     this.player = undefined;
     this.cursors = undefined;
     this.laserSpawner = undefined;
+    this.enemyAsset = undefined
     this.gameOver = false;
     this.bulletTime = 0;
 
@@ -20,7 +26,8 @@ class GameScene extends Phaser.Scene {
   preload() {
     this.load.image("sky", skyAsset);
     this.load.image(PLAYER_KEY,playerAsset);
-    this.load.image(LASER,bulletAsset);
+    this.load.image(LASER_KEY,laserAsset);
+    this.load.image(ENEMY_KEY,enemyAsset);
   }
 
 
@@ -31,7 +38,15 @@ class GameScene extends Phaser.Scene {
     this.add.sprite(400, 300, "sky");
     this.player = this.createPlayer();
     this.laserSpawner = new laserSpawner(this);
+    this.enemySpawner = new enemySpawner(this);
     this.cursors = this.input.keyboard.createCursorKeys();
+    this.time.addEvent({
+      delay : 200,
+      callback: ()=>{
+        this.spawn();
+      },
+      loop: true
+    })
 
   
   }
@@ -78,6 +93,12 @@ class GameScene extends Phaser.Scene {
       this.bulletTime = this.time.now + 200;
     }
   }
+
+  spawn(){
+    var posX = Phaser.Math.Between(10,790);
+    this.enemySpawner.spawnEnemy(posX, 0);
+  }
+
 }
 
 export default GameScene;
