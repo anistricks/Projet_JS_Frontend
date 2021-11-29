@@ -60,21 +60,46 @@ class GameScene extends Phaser.Scene {
     this.player.body.velocity.setTo(0,0);
 
     if (this.cursors.left.isDown) {
-        this.player.setVelocityX(-300);
-        
-    } 
-    else if (this.cursors.right.isDown) {
-        this.player.setVelocityX(300);
+      this.player.setVelocityX(-300);
 
-    } else if(this.cursors.up.isDown){
-        this.player.setVelocityY(-300);
-           
+    } 
+    if (this.cursors.right.isDown) {
+      this.player.setVelocityX(300);
+
+    } 
+    if(this.cursors.up.isDown){
+      this.player.setVelocityY(-300);        
     }
-    else if(this.cursors.down.isDown){
-        this.player.setVelocityY(300);
+    if(this.cursors.down.isDown){
+      this.player.setVelocityY(300);
     }  
+    // Diagonal movement
+    // Up and left
+    if (this.cursors.left.isDown && this.cursors.up.isDown){
+      this.player.body.setVelocityX(-250);
+      this.player.body.setVelocityY(-250);
+    }
+
+    // Up and right
+    if (this.cursors.right.isDown && this.cursors.up.isDown){
+      this.player.body.setVelocityX(250);
+      this.player.body.setVelocityY(-250);
+    }
+
+    // Down and right
+    if (this.cursors.right.isDown && this.cursors.down.isDown){
+      this.player.body.setVelocityX(250);
+      this.player.body.setVelocityY(250);
+    }
+
+    // Down and left
+    if (this.cursors.left.isDown && this.cursors.down.isDown){
+      this.player.body.setVelocityX(-250);
+      this.player.body.setVelocityY(250);
+    }
+        
     if(this.cursors.space.isDown){
-        this.shootLaser();
+      this.shootLaser();
     } 
     
   }
