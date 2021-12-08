@@ -3,8 +3,8 @@ const PLAYER_KEY = "player";
 const LASER_KEY = "laser";
 const ENEMY_KEY = 'enemy';
 import skyAsset from "../../assets/sky.png";
-import playerAsset from "../../assets/star.png";
-import laserAsset from "../../assets/bomb.png";
+import playerAsset from "../../assets/plane.png";
+import laserAsset from "../../assets/laser2.png";
 import enemyAsset from "../../assets/enemy.png";
 
 import laserSpawner from "./LaserSpawner.js";
@@ -34,20 +34,22 @@ class GameScene extends Phaser.Scene {
   //Load player and background
   create(){
 
-  
+    
     this.add.sprite(400, 300, "sky");
     this.player = this.createPlayer();
     this.laserSpawner = new laserSpawner(this);
     this.enemySpawner = new enemySpawner(this);
     this.cursors = this.input.keyboard.createCursorKeys();
+
+    this.physics.add.overlap(this.laserSpawner, this.enemySpawner, this.collisionHandler, null, this);
     this.time.addEvent({
-      delay : 200,
+      delay : 300,
       callback: ()=>{
         this.spawn();
       },
       loop: true
     })
-
+    
   
   }
 
@@ -101,8 +103,17 @@ class GameScene extends Phaser.Scene {
     if(this.cursors.space.isDown){
       this.shootLaser();
     } 
-    
+   
+
+
   }
+
+  //Handle the collision between laser and enemy
+  collisionHandler(laser,enemy){
+      laser.setActive(false).setVisible(false);
+      enemy.setActive(false).setVisible(false);
+  }
+
 
   //Create and add player sprite
   createPlayer() {
@@ -115,7 +126,7 @@ class GameScene extends Phaser.Scene {
   shootLaser(){
     if(this.time.now > this.bulletTime){
       this.laserSpawner.fireLaser(this.player.x, this.player.y-20);
-      this.bulletTime = this.time.now + 200;
+      this.bulletTime = this.time.now + 250;
     }
   }
 
