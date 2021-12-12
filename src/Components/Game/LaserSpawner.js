@@ -1,55 +1,47 @@
-export default class LaserSpawner extends Phaser.Physics.Arcade.Sprite {
-    constructor(scene, x,y){
-        super(scene,x,y, 'laser');
+class Laser extends Phaser.Physics.Arcade.Sprite{
+    constructor(scene, x, y){
+        super(scene,x , y, 'laser');
     }
-    
-    //fire laser
+    //put laser on x,y and make it active + visible
     fire(x,y){
         this.body.reset(x,y);
         this.setActive(true);
         this.setVisible(true);
-        this.setVelocityY(-600);  
+        this.setVelocityY(-900);
+ 
+        
     }
-
-   
-    //delete laser instance when they went out of the scene
+    //erase and reset laser if they are out of the screen
     preUpdate(time, delta){
         super.preUpdate(time, delta);
-        if (this.y <=0){
+        if(this.y <=0){
             this.setActive(false);
             this.setVisible(false);
-
         }
     }
 }
 
-//create laser
-/*
+//class for creating laser group 
 export default class LaserSpawner extends Phaser.Physics.Arcade.Group {
-     /**
-   * @param {Phaser.Scene} scene
-   */
-  /*
-    constructor(scene){
-        super(scene.physics.world,scene);
-    
-    
-    this.createMultiple({
-            classType: Laser,
-            frameQuantity: 30,
-            active: false,
-            visible: false,
-            key: 'laser'  
 
+    constructor(scene){
+        super(scene.physics.world, scene);
+        this.createMultiple({
+            classType: Laser,
+            frameQuantity : 30,
+            active : false,
+            visible: false,
+            key : 'laser'
         })
-    
     }
-    fireLaser(x, y){
+
+    fireLaser(x,y){
         const laser = this.getFirstDead(false);
         if(laser){
             laser.fire(x,y);
         }
     }
-    */
 
-//}
+
+
+}
