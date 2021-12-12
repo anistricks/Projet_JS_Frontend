@@ -1,8 +1,4 @@
-import Phaser, { Time } from "phaser";
-
-
-
-class Laser extends Phaser.Physics.Arcade.Sprite {
+export default class LaserSpawner extends Phaser.Physics.Arcade.Sprite {
     constructor(scene, x,y){
         super(scene,x,y, 'laser');
     }
@@ -28,10 +24,12 @@ class Laser extends Phaser.Physics.Arcade.Sprite {
 }
 
 //create laser
+/*
 export default class LaserSpawner extends Phaser.Physics.Arcade.Group {
      /**
    * @param {Phaser.Scene} scene
    */
+  /*
     constructor(scene){
         super(scene.physics.world,scene);
     
@@ -52,6 +50,6 @@ export default class LaserSpawner extends Phaser.Physics.Arcade.Group {
             laser.fire(x,y);
         }
     }
+    */
 
-
-}
+//}
