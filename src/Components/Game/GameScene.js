@@ -7,8 +7,9 @@ import playerAsset from "../../assets/plane.png";
 import laserAsset from "../../assets/laser2.png";
 import enemyAsset from "../../assets/enemy.png";
 
+import ScoreLabel from "./ScoreLabel.js";
 import laserSpawner from "./LaserSpawner.js";
-import enemySpawner from "./EnemySpawner.js";
+import EnemySpawner from "./EnemySpawner";
 
 
 class GameScene extends Phaser.Scene {
@@ -20,6 +21,7 @@ class GameScene extends Phaser.Scene {
     this.enemyAsset = undefined
     this.gameOver = false;
     this.bulletTime = 0;
+    this.ScoreLabel = undefined;
 
   }
 
@@ -38,14 +40,19 @@ class GameScene extends Phaser.Scene {
     this.add.sprite(400, 300, "sky");
     this.player = this.createPlayer();
     this.laserSpawner = new laserSpawner(this);
-    this.enemySpawner = new enemySpawner(this);
+    this.enemySpawner = new EnemySpawner(this,ENEMY_KEY);
+    this.ScoreLabel = this.createScoreLabel(16,16,0);
+
+    const enemyGroup = this.enemySpawner.group;
     this.cursors = this.input.keyboard.createCursorKeys();
 
-    this.physics.add.overlap(this.laserSpawner, this.enemySpawner, this.collisionHandler, null, this);
+    this.physics.add.overlap(this.laserSpawner, enemyGroup,this.collisionHandler, null, this);
+    
+
     this.time.addEvent({
       delay : 300,
       callback: ()=>{
-        this.spawn();
+        this.enemySpawner.spawn(Phaser.Math.Between(10,790),0, ENEMY_KEY);
       },
       loop: true
     })
@@ -105,13 +112,13 @@ class GameScene extends Phaser.Scene {
     } 
    
 
-
   }
 
   //Handle the collision between laser and enemy
   collisionHandler(laser,enemy){
-      laser.setActive(false).setVisible(false);
-      enemy.setActive(false).setVisible(false);
+      enemy.destroy();
+      laser.destroy();   
+      this.ScoreLabel.add(1);
   }
 
 
@@ -123,17 +130,26 @@ class GameScene extends Phaser.Scene {
     return player;
   }
 
+
   shootLaser(){
+  
     if(this.time.now > this.bulletTime){
       this.laserSpawner.fireLaser(this.player.x, this.player.y-20);
+     
       this.bulletTime = this.time.now + 250;
     }
   }
 
-  spawn(){
-    var posX = Phaser.Math.Between(10,790);
-    this.enemySpawner.spawnEnemy(posX, 0);
+  
+  createScoreLabel(x, y, score) {
+    const style = { fontSize: "32px", fill: "#000" };
+    const label = new ScoreLabel(this, x, y, score, style);
+    console.log("score:", label);
+    this.add.existing(label);
+
+    return label;
   }
+  
 
 }
 
