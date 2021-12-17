@@ -3,13 +3,14 @@ const PLAYER_KEY = "player";
 const LASER_KEY = "laser";
 const ENEMY_KEY = 'enemy';
 import skyAsset from "../../assets/sky.png";
-import playerAsset from "../../assets/plane.png";
-import laserAsset from "../../assets/laser2.png";
+import playerAsset from "../../assets/plane4.png";
+import laserAsset from "../../assets/laser3.png";
 import enemyAsset from "../../assets/enemy.png";
 
 import ScoreLabel from "./ScoreLabel.js";
-import laserSpawner from "./LaserSpawner.js";
+import LaserSpawner from "./LaserSpawner.js";
 import EnemySpawner from "./EnemySpawner";
+import LiveLabel from "./LiveLabel.js";
 
 
 class GameScene extends Phaser.Scene {
@@ -21,7 +22,8 @@ class GameScene extends Phaser.Scene {
     this.enemyAsset = undefined
     this.gameOver = false;
     this.bulletTime = 0;
-    this.ScoreLabel = undefined;
+    this.scoreLabel = undefined;
+    this.liveLabel = undefined;
 
   }
 
@@ -39,10 +41,10 @@ class GameScene extends Phaser.Scene {
     
     this.add.sprite(400, 300, "sky");
     this.player = this.createPlayer();
-    this.laserSpawner = new laserSpawner(this);
+    this.laserSpawner = new LaserSpawner(this);
     this.enemySpawner = new EnemySpawner(this,ENEMY_KEY);
-    this.ScoreLabel = this.createScoreLabel(16,16,0);
-
+    this.scoreLabel = this.createScoreLabel(16,16,0);
+    this.liveLabel = this.createLiveLabel(500,500,3);
     const enemyGroup = this.enemySpawner.group;
     this.cursors = this.input.keyboard.createCursorKeys();
 
@@ -117,7 +119,8 @@ class GameScene extends Phaser.Scene {
   //Handle the collision between laser and enemy
   collisionHandler(laser,enemy){
       enemy.destroy();
-      laser.destroy();   
+      laser.setVisible(false);
+      laser.setActive(false);
       this.ScoreLabel.add(1);
   }
 
@@ -149,6 +152,16 @@ class GameScene extends Phaser.Scene {
 
     return label;
   }
+
+  createLiveLabel(x, y, score) {
+    const style = { fontSize: "32px", fill: "#000" };
+    const label = new LiveLabel(this, x, y, score, style);
+    console.log("score:", label);
+    this.add.existing(label);
+
+    return label;
+  }
+  
   
 
 }
