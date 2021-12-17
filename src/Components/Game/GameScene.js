@@ -2,15 +2,18 @@ import Phaser from "phaser";
 const PLAYER_KEY = "player";
 const LASER_KEY = "laser";
 const ENEMY_KEY = 'enemy';
+
 import skyAsset from "../../assets/sky.png";
 import playerAsset from "../../assets/plane4.png";
 import laserAsset from "../../assets/laser3.png";
 import enemyAsset from "../../assets/enemy.png";
 import laserSound from "../../assets/Sounds/Laser.mp3";
 import explosionSound from "../../assets/Sounds/Explosion.mp3";
+import explosionAsset  from "../../assets/explosion.png"
+
 
 import ScoreLabel from "./ScoreLabel.js";
-import LaserSpawner from "./LaserSpawner2.js";
+import LaserSpawner from "./LaserSpawner.js";
 import EnemySpawner from "./EnemySpawner";
 import LiveLabel from "./LiveLabel.js";
 
@@ -36,6 +39,7 @@ class GameScene extends Phaser.Scene {
     this.load.image(PLAYER_KEY,playerAsset);
     this.load.image(LASER_KEY,laserAsset);
     this.load.image(ENEMY_KEY,enemyAsset);
+    this.load.image('explosion', explosionAsset);
     this.load.audio('laserSound',laserSound);
     this.load.audio('explosionSound', explosionSound);
   }
@@ -44,7 +48,7 @@ class GameScene extends Phaser.Scene {
   //Load player and background
   create(){
 
-    
+ 
     this.add.sprite(400, 300, "sky");
     this.player = this.createPlayer();
 
@@ -56,10 +60,11 @@ class GameScene extends Phaser.Scene {
     this.scoreLabel = this.createScoreLabel(16,16,0);
     this.liveLabel = this.createLiveLabel(600,550,3);
 
+    const laserGroup = this.laserSpawner.group;
     const enemyGroup = this.enemySpawner.group;
     this.cursors = this.input.keyboard.createCursorKeys();
 
-    this.physics.add.overlap(this.laserSpawner, enemyGroup,this.collisionHandler, null, this);
+    this.physics.add.overlap(laserGroup, enemyGroup,this.collisionHandler, null, this);
     this.physics.add.overlap(this.player, enemyGroup,this.playerHit, null, this);
 
     this.spawner = this.time.addEvent({
@@ -131,9 +136,15 @@ class GameScene extends Phaser.Scene {
 
   //Handle the collision between laser and enemy
   collisionHandler(laser,enemy){
+    const explosion = this.createExplosion(enemy.x,enemy.y);
+    this.time.addEvent({
+      delay:100,
+      callback: ()=>{
+        this.destroyExplosion(explosion);
+      }
+    });
     enemy.destroy();
-    laser.setVisible(false);
-    laser.setActive(false);
+    laser.destroy();
     this.scoreLabel.add(1);
     this.explosionSound.play();
   }
@@ -159,7 +170,7 @@ class GameScene extends Phaser.Scene {
   shootLaser(){
   
     if(this.time.now > this.bulletTime){
-      this.laserSpawner.fireLaser(this.player.x, this.player.y-20);
+      this.laserSpawner.shoot(this.player.x, this.player.y-50);
       this.laserSound.play();
       this.bulletTime = this.time.now + 250;
     }
@@ -186,7 +197,14 @@ class GameScene extends Phaser.Scene {
     return label;
   }
   
+  createExplosion(x,y){
+    const explosion = this.add.sprite(x,y,'explosion');
+    return explosion;
+  }
   
+  destroyExplosion(explosion){
+    explosion.destroy();
+  }
 
 }
 

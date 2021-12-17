@@ -1,6 +1,6 @@
 import Phaser from "phaser";
 
-const formatLive = (live) => `Live: ${live}`;
+const formatLive = (live) => `Lives: ${live}`;
 
 export default class ScoreLabel extends Phaser.GameObjects.Text {
   constructor(scene, x, y, live, style) {
