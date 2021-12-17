@@ -3,8 +3,8 @@ import Phaser from "phaser";
 const formatLive = (live) => `Live: ${live}`;
 
 export default class ScoreLabel extends Phaser.GameObjects.Text {
-  constructor(scene, x, y, score, style) {
-    super(scene, x, y, formatLive(score), style);
+  constructor(scene, x, y, live, style) {
+    super(scene, x, y, formatLive(live), style);
     console.log("inside class", this.text);
     this.live= live;
   }
@@ -22,11 +22,12 @@ export default class ScoreLabel extends Phaser.GameObjects.Text {
       this.setLive(this.live - points);
   }
 
-  updateLiveText() {
-    this.setText(formatScore(this.live));
+  get(){
+      return this.live;
   }
-  getScore(){
-    return this.score;
+
+  updateLiveText() {
+    this.setText(formatLive(this.live));
   }
 
 }

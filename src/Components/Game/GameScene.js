@@ -6,6 +6,8 @@ import skyAsset from "../../assets/sky.png";
 import playerAsset from "../../assets/plane4.png";
 import laserAsset from "../../assets/laser3.png";
 import enemyAsset from "../../assets/enemy.png";
+import laserSound from "../../assets/Sounds/Laser.mp3";
+import explosionSound from "../../assets/Sounds/Explosion.mp3";
 
 import ScoreLabel from "./ScoreLabel.js";
 import LaserSpawner from "./LaserSpawner.js";
@@ -24,7 +26,9 @@ class GameScene extends Phaser.Scene {
     this.bulletTime = 0;
     this.scoreLabel = undefined;
     this.liveLabel = undefined;
-
+    this.spawner = undefined;
+    this.laserSound = undefined;
+    this.explosionSound = undefined;
   }
 
   preload() {
@@ -32,6 +36,8 @@ class GameScene extends Phaser.Scene {
     this.load.image(PLAYER_KEY,playerAsset);
     this.load.image(LASER_KEY,laserAsset);
     this.load.image(ENEMY_KEY,enemyAsset);
+    this.load.audio('laserSound',laserSound);
+    this.load.audio('explosionSound', explosionSound);
   }
 
 
@@ -41,23 +47,28 @@ class GameScene extends Phaser.Scene {
     
     this.add.sprite(400, 300, "sky");
     this.player = this.createPlayer();
+
     this.laserSpawner = new LaserSpawner(this);
+    this.laserSound = this.sound.add('laserSound');
     this.enemySpawner = new EnemySpawner(this,ENEMY_KEY);
+    this.explosionSound = this.sound.add('explosionSound');
+
     this.scoreLabel = this.createScoreLabel(16,16,0);
-    this.liveLabel = this.createLiveLabel(500,500,3);
+    this.liveLabel = this.createLiveLabel(600,550,3);
+
     const enemyGroup = this.enemySpawner.group;
     this.cursors = this.input.keyboard.createCursorKeys();
 
     this.physics.add.overlap(this.laserSpawner, enemyGroup,this.collisionHandler, null, this);
-    
+    this.physics.add.overlap(this.player, enemyGroup,this.playerHit, null, this);
 
-    this.time.addEvent({
+    this.spawner = this.time.addEvent({
       delay : 300,
       callback: ()=>{
         this.enemySpawner.spawn(Phaser.Math.Between(10,790),0, ENEMY_KEY);
       },
       loop: true
-    })
+    });
     
   
   }
@@ -66,6 +77,8 @@ class GameScene extends Phaser.Scene {
   //Move player up, down , left, right
   update() {
     if (this.gameOver) {
+      this.player.destroy();
+      this.spawner.remove(false);
       return;
     }
     this.player.body.velocity.setTo(0,0);
@@ -118,12 +131,21 @@ class GameScene extends Phaser.Scene {
 
   //Handle the collision between laser and enemy
   collisionHandler(laser,enemy){
-      enemy.destroy();
-      laser.setVisible(false);
-      laser.setActive(false);
-      this.ScoreLabel.add(1);
+    enemy.destroy();
+    laser.setVisible(false);
+    laser.setActive(false);
+    this.scoreLabel.add(1);
+    this.explosionSound.play();
   }
 
+  playerHit(player,enemy){
+    this.liveLabel.remove(1);
+    enemy.destroy();
+    if(this.liveLabel.get()==0){
+      this.gameOver = true;
+    }
+
+  }
 
   //Create and add player sprite
   createPlayer() {
@@ -138,9 +160,11 @@ class GameScene extends Phaser.Scene {
   
     if(this.time.now > this.bulletTime){
       this.laserSpawner.fireLaser(this.player.x, this.player.y-20);
-     
+      this.laserSound.play();
       this.bulletTime = this.time.now + 250;
     }
+  
+
   }
 
   
@@ -153,9 +177,9 @@ class GameScene extends Phaser.Scene {
     return label;
   }
 
-  createLiveLabel(x, y, score) {
+  createLiveLabel(x, y, live) {
     const style = { fontSize: "32px", fill: "#000" };
-    const label = new LiveLabel(this, x, y, score, style);
+    const label = new LiveLabel(this, x, y, live, style);
     console.log("score:", label);
     this.add.existing(label);
 
