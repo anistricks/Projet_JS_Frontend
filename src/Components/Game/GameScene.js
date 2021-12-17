@@ -10,7 +10,7 @@ import laserSound from "../../assets/Sounds/Laser.mp3";
 import explosionSound from "../../assets/Sounds/Explosion.mp3";
 
 import ScoreLabel from "./ScoreLabel.js";
-import LaserSpawner from "./LaserSpawner.js";
+import LaserSpawner from "./LaserSpawner2.js";
 import EnemySpawner from "./EnemySpawner";
 import LiveLabel from "./LiveLabel.js";
 
@@ -48,7 +48,7 @@ class GameScene extends Phaser.Scene {
     this.add.sprite(400, 300, "sky");
     this.player = this.createPlayer();
 
-    this.laserSpawner = new LaserSpawner(this);
+    this.laserSpawner = new LaserSpawner(this,LASER_KEY);
     this.laserSound = this.sound.add('laserSound');
     this.enemySpawner = new EnemySpawner(this,ENEMY_KEY);
     this.explosionSound = this.sound.add('explosionSound');
