@@ -16,6 +16,7 @@ import ScoreLabel from "./ScoreLabel.js";
 import LaserSpawner from "./LaserSpawner.js";
 import EnemySpawner from "./EnemySpawner";
 import LiveLabel from "./LiveLabel.js";
+import BossSpawner from "./BossSpawner.js";
 
 
 class GameScene extends Phaser.Scene {
@@ -32,6 +33,9 @@ class GameScene extends Phaser.Scene {
     this.spawner = undefined;
     this.laserSound = undefined;
     this.explosionSound = undefined;
+    this.boss = undefined;
+    this.roundBoss = false;
+
   }
 
   preload() {
@@ -63,10 +67,18 @@ class GameScene extends Phaser.Scene {
     const laserGroup = this.laserSpawner.group;
     const enemyGroup = this.enemySpawner.group;
     this.cursors = this.input.keyboard.createCursorKeys();
+   /*
+    this.boss = new BossSpawner(this,'boss',100);
+    const bossSpawn = this.test.group;
+    this.boss.spawn(500,100);
+    this.physics.add.overlap(laserGroup,bossSpawn,this.bossHit,null,this);
+    */
 
     this.physics.add.overlap(laserGroup, enemyGroup,this.collisionHandler, null, this);
     this.physics.add.overlap(this.player, enemyGroup,this.playerHit, null, this);
 
+    
+    
     this.spawner = this.time.addEvent({
       delay : 300,
       callback: ()=>{
@@ -81,6 +93,8 @@ class GameScene extends Phaser.Scene {
 
   //Move player up, down , left, right
   update() {
+    
+
     if (this.gameOver) {
       this.player.destroy();
       this.spawner.remove(false);
@@ -149,6 +163,7 @@ class GameScene extends Phaser.Scene {
     this.explosionSound.play();
   }
 
+  //Detect if player get hit by enemy
   playerHit(player,enemy){
     this.liveLabel.remove(1);
     enemy.destroy();
@@ -178,7 +193,20 @@ class GameScene extends Phaser.Scene {
 
   }
 
+  //Detect if the boss hit by laser
+  bossHit(laser,boss){
+    laser.destroy();
+    this.test.decreaseHealth(10);
+    if(this.test.getHealth()==0){
+      boss.destroy();
+      console.log(1);
+    }
   
+
+  }
+  
+
+  //Score
   createScoreLabel(x, y, score) {
     const style = { fontSize: "32px", fill: "#000" };
     const label = new ScoreLabel(this, x, y, score, style);
@@ -188,6 +216,7 @@ class GameScene extends Phaser.Scene {
     return label;
   }
 
+  //Lives
   createLiveLabel(x, y, live) {
     const style = { fontSize: "32px", fill: "#000" };
     const label = new LiveLabel(this, x, y, live, style);
@@ -197,11 +226,13 @@ class GameScene extends Phaser.Scene {
     return label;
   }
   
+  //create explosion
   createExplosion(x,y){
     const explosion = this.add.sprite(x,y,'explosion');
     return explosion;
   }
   
+  //destroy explosion sprite
   destroyExplosion(explosion){
     explosion.destroy();
   }

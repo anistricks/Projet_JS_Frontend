@@ -19,10 +19,17 @@ export default class BossSpawner {
 
   spawn(x,y) {
     const boss = this.group.create(x,y,this.key);
-    
+
     return boss; 
   }
 
+  decreaseHealth(dmg){
+    this.hp = this.hp-dmg;
+  }
+  getHealth(){
+      return this.hp;
+  }
+  
 
   preUpdate(time, delta){
     super.preUpdate(time, delta);
