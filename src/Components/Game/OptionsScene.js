@@ -35,11 +35,11 @@ class OptionsScene extends Phaser.Scene {
     update(){
 
     }
+
 clickButtonReturn(){
     this.buttonSound.play();
     this.scene.stop();
-    this.scene.resume('game-scene');
-    
+    this.scene.run('game-scene');
 }
 
 clickMainMenuButton(){

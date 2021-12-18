@@ -5,20 +5,20 @@ import buttonSoundAsset from "../../assets/buttonSound.mp3";
 
 
 //A remplacer par le score enregistré 
-var score;
 
+var score;
 
 class EndScene extends Phaser.Scene {
     constructor(){
         super("end-scene")
-        
     }
 
     init(data){
-        this.score = data.score;
+        score = data.score;
     }
 
-    preload(){
+    preload(data){
+        //score = data.score;
         this.load.image("sky", skyAsset);
         this.load.audio("buttonSound", buttonSoundAsset);
     }
