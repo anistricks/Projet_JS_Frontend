@@ -247,6 +247,7 @@ async getSetHighscore  (user, highScore) {
         this.destroyExplosion(explosion);
       }
     });
+    this.explosionSound.play();
     this.liveLabel.remove(1);
     enemy.destroy();
     if(this.liveLabel.get()==0){
