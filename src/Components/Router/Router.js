@@ -3,6 +3,7 @@ import GamePage from "../Pages/GamePage";
 import LoginPage from "../Pages/LoginPage";
 import RegisterPage from "../Pages/RegisterPage";
 import Logout from "../Logout/Logout";
+import Leaderboard from "../Pages/LeaderboardPage";
 
 // Configure your routes here
 const routes = {
@@ -11,6 +12,7 @@ const routes = {
   "/login": LoginPage,
   "/register": RegisterPage,
   "/logout": Logout,
+  "/leaderboard": Leaderboard,
 };
 
 /**

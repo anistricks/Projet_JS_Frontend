@@ -18,6 +18,10 @@ import EnemySpawner from "./EnemySpawner";
 import LiveLabel from "./LiveLabel.js";
 import BossSpawner from "./BossSpawner.js";
 
+import musicAsset from "../../assets/music.mp3";
+import pauseButtonAsset from "../../assets/buttonPause.png";
+import buttonSoundAsset from "../../assets/buttonSound.mp3";
+
 
 class GameScene extends Phaser.Scene {
   constructor() {
@@ -46,6 +50,9 @@ class GameScene extends Phaser.Scene {
     this.load.image('explosion', explosionAsset);
     this.load.audio('laserSound',laserSound);
     this.load.audio('explosionSound', explosionSound);
+
+    this.load.audio('buttonSound', buttonSoundAsset);
+    this.load.image('pauseButton', pauseButtonAsset);
   }
 
 
@@ -87,6 +94,11 @@ class GameScene extends Phaser.Scene {
       loop: true
     });
     
+    var ReturnText = this.add.image(750,30, 'pauseButton');
+        ReturnText.setInteractive({ useHandCursor: true });
+        ReturnText.on('pointerdown', () => this.clickButtonReturn());
+    
+    this.buttonSound = this.sound.add('buttonSound');
   
   }
 
@@ -147,6 +159,13 @@ class GameScene extends Phaser.Scene {
    
 
   }
+
+  clickButtonReturn(){
+    this.buttonSound.play();
+    this.scene.pause();
+    this.scene.launch('options-scene');
+    
+}
 
   //Handle the collision between laser and enemy
   collisionHandler(laser,enemy){

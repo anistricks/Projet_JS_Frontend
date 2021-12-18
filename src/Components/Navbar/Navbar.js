@@ -21,7 +21,7 @@ if (!user) {
    navbar = `
   <nav class="navbar navbar-expand-lg navbar navbar-dark bg-dark">
         <div class="container-fluid">
-          <a class="navbar-brand" href="#">Space Defender</a>
+          <a class="navbar-brand" href="#" data-uri="/">Space Defender</a>
           <button
             class="navbar-toggler"
             type="button"
@@ -40,6 +40,9 @@ if (!user) {
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="#" data-uri="/game">Game</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#" data-uri="/leaderboard">Leaderboard</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="#" data-uri="/login">Login</a>
@@ -57,7 +60,7 @@ if (!user) {
   navbar = `
   <nav class="navbar navbar-expand-lg navbar navbar-dark bg-dark">
         <div class="container-fluid">
-          <a class="navbar-brand" href="#">Space Defendere</a>
+          <a class="navbar-brand" href="#" data-uri="/">Space Defender</a>
           <button
             class="navbar-toggler"
             type="button"
@@ -77,6 +80,9 @@ if (!user) {
               <li class="nav-item">
                 <a class="nav-link" href="#" data-uri="/game">Game</a>
               </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#" data-uri="/leaderboard">Leaderboard</a>
+              </li>  
               <li class="nav-item">
               <a class="nav-link" href="#" data-uri="/logout">Logout</a>
             </li>
