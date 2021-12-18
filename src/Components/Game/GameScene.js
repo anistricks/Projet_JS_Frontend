@@ -114,7 +114,8 @@ class GameScene extends Phaser.Scene {
       this.player.destroy();
       this.spawner.remove(false);*/
       var score = this.scoreLabel.getScore();
-      this.Sethighscore();
+      //this.Sethighscore(score);
+      console.log(this.getSetHighscore(getSessionObject('user'), score));
       this.scene.stop;
       this.scene.start('end-scene', {score: score});
       this.gameOver = false;
@@ -126,39 +127,36 @@ class GameScene extends Phaser.Scene {
 
   }
 
-  Sethighscore(){
+  Sethighscore(score){
     let user = getSessionObject('user');
-    if(user){
-      if(this.score > user.highscore){
-        changerHighscore(this.score);
+    if(true){
+      if(score > user.highscore){
+        console.log(666);
+        this.getSetHighscore(user, score);
       }
     }
   }
 
-  changerHighscore(score){
-    try{
-      const options = {
-        method: "PUT", 
-        body: JSON.stringify({
-          highscore: score,
-        }), 
-        headers: {
-          "Content-Type": "application/json",
-        },
-      };
+  
 
-      const response = fetch(`/api/auths/user/${user.username}`, options); // fetch return a promise => we wait for the response
-      if(!response.ok){
-        throw new Error(
-          "fetch error : " + response.status + " : " + response.statusText
-        );
-      }
-    }catch(error){
-      console.error("error : ", error);
+async getSetHighscore  (user, highScore) {
+        let toReturn = "";
+        await fetch("/api/auths/score", {
+            method: "POST", 
+            body: JSON.stringify({username: user.username, highScore: highScore}), 
+            headers: {
+                Authorization: user.token,
+                "Content-Type": "application/json",
+            },
+        })
+        .then((response) => {
+            if (!response.ok)
+                throw new Error("Error code : " + response.status + " : " + response.statusText);
+            return response.json();
+        })
+        .catch((err) => console.log(err.message));
+        return toReturn;
     }
-    user.highscore = score;
-    console.log("user after update : ", user);
-  }
 
 
 
