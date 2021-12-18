@@ -56,7 +56,7 @@ function LoginPage() {
 
       if (!response.ok) {
         throw new Error(
-          "fetch error : " + response.status + " : " + response.statusText
+          "fetch error : " + response.status + ":" + response.statusText
         );
       }
       const user = await response.json(); // json() returns a promise => we wait for the data
