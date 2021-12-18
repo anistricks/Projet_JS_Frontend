@@ -292,7 +292,7 @@ class GameScene extends Phaser.Scene {
 
   //Score
   createScoreLabel(x, y, score) {
-    const style = { fontSize: "32px", fill: "#000" };
+    const style = { fontSize: "32px", fill: "#FFFFFF" };
     const label = new ScoreLabel(this, x, y, score, style);
     console.log("score:", label);
     this.add.existing(label);
@@ -302,7 +302,7 @@ class GameScene extends Phaser.Scene {
 
   //Lives
   createLiveLabel(x, y, live) {
-    const style = { fontSize: "32px", fill: "#000" };
+    const style = { fontSize: "32px", fill: "#FFFFFF" };
     const label = new LiveLabel(this, x, y, live, style);
     console.log("score:", label);
     this.add.existing(label);
