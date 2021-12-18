@@ -22,6 +22,8 @@ import musicAsset from "../../assets/music.mp3";
 import pauseButtonAsset from "../../assets/buttonPause.png";
 import buttonSoundAsset from "../../assets/buttonSound.mp3";
 
+import { getSessionObject } from "../../utils/session";
+
 
 class GameScene extends Phaser.Scene {
   constructor() {
@@ -112,6 +114,7 @@ class GameScene extends Phaser.Scene {
       this.player.destroy();
       this.spawner.remove(false);*/
       var score = this.scoreLabel.getScore();
+      this.Sethighscore();
       this.scene.stop;
       this.scene.start('end-scene', {score: score});
       this.gameOver = false;
@@ -122,6 +125,43 @@ class GameScene extends Phaser.Scene {
    
 
   }
+
+  Sethighscore(){
+    let user = getSessionObject('user');
+    if(user){
+      if(this.score > user.highscore){
+        changerHighscore(this.score);
+      }
+    }
+  }
+
+  changerHighscore(score){
+    try{
+      const options = {
+        method: "PUT", 
+        body: JSON.stringify({
+          highscore: score,
+        }), 
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+
+      const response = fetch(`/api/auths/user/${user.username}`, options); // fetch return a promise => we wait for the response
+      if(!response.ok){
+        throw new Error(
+          "fetch error : " + response.status + " : " + response.statusText
+        );
+      }
+    }catch(error){
+      console.error("error : ", error);
+    }
+    user.highscore = score;
+    console.log("user after update : ", user);
+  }
+
+
+
 
   velocityPlayer(){
     this.player.body.velocity.setTo(0,0);

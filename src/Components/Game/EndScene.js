@@ -18,7 +18,7 @@ class EndScene extends Phaser.Scene {
     }
 
     preload(data){
-        //score = data.score;
+        
         this.load.image("sky", skyAsset);
         this.load.audio("buttonSound", buttonSoundAsset);
     }

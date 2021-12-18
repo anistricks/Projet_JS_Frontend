@@ -1,5 +1,6 @@
 import HomePage from "./HomePage";
 import { Redirect } from "../Router/Router";
+import {getUserSessionData} from "../../utils/session.js";
 
 let leaderboardPage = `
 <p id="bestScores">Best Scores !!!</p>
@@ -9,8 +10,7 @@ let leaderboardPage = `
   <tr>
     <th scope="col">#</th>
     <th scope="col">Pseudo</th>
-    <th scope="col">Score</th>
-    
+    <th scope="col">Score</th>  
   </tr>
 </thead>
 <tbody>
@@ -50,8 +50,12 @@ function Leaderboard() {
   
 }
 
-const score = () => {
-  
+const RankingPage = () => {
+  loadScoreboard();
 }
 
+const loadScoreboard = async () => {
+  
+
+}
 export default Leaderboard;
