@@ -26,6 +26,7 @@ export default class LaserSpawner {
     if(this.y >= 600){
         this.setActive(false);
         this.setVisible(false);
+        this._group.destroy();
     }
 }
 }
