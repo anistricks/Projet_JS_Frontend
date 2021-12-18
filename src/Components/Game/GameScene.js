@@ -165,6 +165,13 @@ class GameScene extends Phaser.Scene {
 
   //Detect if player get hit by enemy
   playerHit(player,enemy){
+    const explosion = this.createExplosion(player.x,player.y);
+    this.time.addEvent({
+      delay:50,
+      callback: ()=>{
+        this.destroyExplosion(explosion);
+      }
+    });
     this.liveLabel.remove(1);
     enemy.destroy();
     if(this.liveLabel.get()==0){
