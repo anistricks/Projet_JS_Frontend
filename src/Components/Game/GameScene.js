@@ -96,7 +96,7 @@ class GameScene extends Phaser.Scene {
     
     var ReturnText = this.add.image(750,30, 'pauseButton');
         ReturnText.setInteractive({ useHandCursor: true });
-        ReturnText.on('pointerdown', () => this.clickButtonReturn());
+        ReturnText.on('pointerdown', () => this.clickPauseButton());
     
     this.buttonSound = this.sound.add('buttonSound');
   
@@ -111,10 +111,11 @@ class GameScene extends Phaser.Scene {
       /*
       this.player.destroy();
       this.spawner.remove(false);*/
+      let score = this.scoreLabel.getScore();
       this.scene.stop;
-      this.scene.start('end-scene');
+      this.scene.start('end-scene', {score: score});
       this.gameOver = false;
-      this.scoreLabel.getScore();
+      
       //return;
     }
     this.velocityPlayer();
@@ -171,16 +172,16 @@ class GameScene extends Phaser.Scene {
 
 
 
-  clickButtonReturn(){
+  clickPauseButton(){
     this.buttonSound.play();
     /*
     this.cursors.left.reset();
     this.cursors.right.reset();
     this.cursors.up.reset();
     this.cursors.down.reset();*/
-
-    this.scene.start('options-scene');
     this.scene.pause();
+    this.scene.launch('options-scene');
+    
     
     
     
