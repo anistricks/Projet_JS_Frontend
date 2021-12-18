@@ -1,6 +1,6 @@
 import Phaser from "phaser";
 
-import skyAsset from "../../assets/title_bg.jpg";
+import backgroundAsset from "../../assets/title_bg.jpg";
 import playButtonAsset from "../../assets/play_button.png";
 import optionsButtonAsset from "../../assets/options_button.png";
 import musicAsset from "../../assets/music.mp3";
@@ -20,7 +20,7 @@ class MenuScene extends Phaser.Scene {
       preload() {
         this.load.audio('musicLoop', musicAsset);
         this.load.audio('buttonSound', buttonSoundAsset);
-        this.load.image("sky", skyAsset);
+        this.load.image("sky", backgroundAsset);
         
         this.load.image("playButton", playButtonAsset);
         this.load.image("optionsButton", optionsButtonAsset);

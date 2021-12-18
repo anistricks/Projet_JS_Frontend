@@ -2,6 +2,7 @@ import Phaser from "phaser";
 import GameScene from "../Game/GameScene.js";
 import OptionsScene from "../Game/OptionsScene.js";
 import MenuScene from "../Game/MenuScene.js";
+import EndScene from "../Game/EndScene.js";
 var game;
 
 const GamePage = () => {
@@ -36,6 +37,7 @@ const GamePage = () => {
   game.scene.add('menu-scene', MenuScene);
   game.scene.add('options-scene', OptionsScene);
   game.scene.add('game-scene', GameScene);
+  game.scene.add('end-scene', EndScene);
   game.scene.start('menu-scene');
 
 };

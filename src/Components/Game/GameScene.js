@@ -108,10 +108,21 @@ class GameScene extends Phaser.Scene {
     
 
     if (this.gameOver) {
+      /*
       this.player.destroy();
-      this.spawner.remove(false);
-      return;
+      this.spawner.remove(false);*/
+      this.scene.stop;
+      this.scene.start('end-scene');
+      this.gameOver = false;
+      this.scoreLabel.getScore();
+      //return;
     }
+    this.velocityPlayer();
+   
+
+  }
+
+  velocityPlayer(){
     this.player.body.velocity.setTo(0,0);
 
     if (this.cursors.left.isDown) {
@@ -156,14 +167,22 @@ class GameScene extends Phaser.Scene {
     if(this.cursors.space.isDown){
       this.shootLaser();
     } 
-   
-
   }
+
+
 
   clickButtonReturn(){
     this.buttonSound.play();
+    /*
+    this.cursors.left.reset();
+    this.cursors.right.reset();
+    this.cursors.up.reset();
+    this.cursors.down.reset();*/
+
+    this.scene.start('options-scene');
     this.scene.pause();
-    this.scene.launch('options-scene');
+    
+    
     
 }
 

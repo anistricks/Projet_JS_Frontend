@@ -4,9 +4,13 @@ import skyAsset from "../../assets/sky.png";
 import buttonSoundAsset from "../../assets/buttonSound.mp3";
 
 
-class OptionsScene extends Phaser.Scene {
+//A remplacer par le score enregistré 
+var score = 0;
+
+
+class EndScene extends Phaser.Scene {
     constructor(){
-        super("options-scene")
+        super("end-scene")
     }
 
     preload(){
@@ -22,11 +26,12 @@ class OptionsScene extends Phaser.Scene {
         .setOrigin(0)
         .setDepth(0);
 
-        var ReturnText = this.add.text(12,12, 'RETURN TO THE GAME');
-        ReturnText.setInteractive({ useHandCursor: true });
-        ReturnText.on('pointerdown', () => this.clickButtonReturn());
+        var ReplayText = this.add.text(12,12, 'RESTART A GAME');
+        ReplayText.setInteractive({ useHandCursor: true });
+        ReplayText.on('pointerdown', () => this.clickReplayButton());
 
-        this.add.text(230, 180, 'Game Paused', {font: '56px Arial', fill: 'white'});
+        this.add.text(230, 180, 'Score : ' + score, {font: '56px Arial', fill: 'white'});
+
         var text = this.add.text(290, 380, ' Main Menu ', {font: '44px Arial', fill: 'white'});
         text.setInteractive({ useHandCursor: true });
         text.on('pointerdown', () => this.clickMainMenuButton());
@@ -35,10 +40,10 @@ class OptionsScene extends Phaser.Scene {
     update(){
 
     }
-clickButtonReturn(){
+clickReplayButton(){
     this.buttonSound.play();
     this.scene.stop();
-    this.scene.resume('game-scene');
+    this.scene.start('game-scene');
     
 }
 
@@ -49,4 +54,4 @@ clickMainMenuButton(){
 }
 
 }
-export default OptionsScene;
+export default EndScene;
