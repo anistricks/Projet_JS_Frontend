@@ -29,7 +29,9 @@ export default class BossSpawner {
   getHealth(){
       return this.hp;
   }
-  
+  setHealth(hp){
+    this.hp = hp;
+  }
 
   preUpdate(time, delta){
     super.preUpdate(time, delta);
