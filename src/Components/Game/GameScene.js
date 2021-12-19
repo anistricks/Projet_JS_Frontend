@@ -144,13 +144,9 @@ class GameScene extends Phaser.Scene {
       this.player.destroy();
       this.spawner.remove(false);*/
       var score = this.scoreLabel.getScore();
-<<<<<<< HEAD
-=======
-
->>>>>>> af5d62545b4b615476ad4492045718097598f3e3
       console.log(score);
      
-      this.Sethighscore();
+      this.Sethighscore(score);
       //this.getSetHighscore(getSessionObject('user'), score);
       this.scene.stop;
       this.scene.start('end-scene', {score: score});
@@ -182,8 +178,30 @@ class GameScene extends Phaser.Scene {
     }
     this.velocityPlayer();
   }
+
+  getHighScore(username) {
+    let toReturn = "";
+    console.log("fetch for user : "+username)
+    fetch("/api/auths/user", {
+        method: "POST", 
+        body: JSON.stringify({username: username}), 
+        headers: {
+            Authorization: username.token,
+            "Content-Type": "application/json",
+        },
+    })
+    .then((response) => {
+        if (!response.ok)
+            throw new Error("Error code : " + response.status + " : " + response.statusText);
+            
+        return response.json();
+    })
+    .catch((err) => console.log(err.message));
+    
+    return toReturn;
+}
   // fonctionne
-  async getSetHighscore  (user, highScore) {
+  async getSetHighscore  (user,highScore) {
     let toReturn = "";
     await fetch("/api/auths/score", {
         method: "POST",
@@ -203,17 +221,23 @@ class GameScene extends Phaser.Scene {
 }
 
 
-  Sethighscore(){
+  Sethighscore(score){
     let user = getSessionObject('user');
     //condition ---> if(user)
+    console.log(user);
     if(user){
       //remplacer userdata.highScore par getHighScore(username)
       //qui renvoie le meilleur score du username
-      if(this.score > this.getSetHighscore(user)){
-        changerHighscore(this.score);
+      console.log('2');
+      console.log(this.getSetHighscore(user, score));
+      if(score > this.getSetHighscore(user)){
+        console.log('3');
+        changerHighscore(score);
       }
     }
   }
+
+
   changerHighscore(score){
     try{
       const options = {
@@ -234,6 +258,7 @@ class GameScene extends Phaser.Scene {
     }catch(error){
       console.error("error : ", error);
     
+
 }
     user.highscore = score;
     console.log("user after update : ", user);
