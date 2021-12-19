@@ -144,9 +144,14 @@ class GameScene extends Phaser.Scene {
       this.player.destroy();
       this.spawner.remove(false);*/
       var score = this.scoreLabel.getScore();
+<<<<<<< HEAD
+=======
+
+>>>>>>> af5d62545b4b615476ad4492045718097598f3e3
       console.log(score);
      
-     // this.Sethighscore();
+      this.Sethighscore();
+      //this.getSetHighscore(getSessionObject('user'), score);
       this.scene.stop;
       this.scene.start('end-scene', {score: score});
       this.gameOver = false;
@@ -170,25 +175,45 @@ class GameScene extends Phaser.Scene {
     this.bossAttack.paused = true;
     this.bossEvent.paused = true;
     }
-
     if(this.roundBoss){
       this.spawner.paused = true;
       this.bossEvent.paused = false;
       this.bossAttack.paused = false;
     }
     this.velocityPlayer();
-
   }
+  // fonctionne
+  async getSetHighscore  (user, highScore) {
+    let toReturn = "";
+    await fetch("/api/auths/score", {
+        method: "POST",
+        body: JSON.stringify({username: user.username, highScore: highScore}),
+        headers: {
+            Authorization: user.token,
+            "Content-Type": "application/json",
+        },
+    })
+    .then((response) => {
+        if (!response.ok)
+            throw new Error("Error code : " + response.status + " : " + response.statusText);
+        return response.json();
+    })
+    .catch((err) => console.log(err.message));
+    return toReturn;
+}
+
 
   Sethighscore(){
     let user = getSessionObject('user');
+    //condition ---> if(user)
     if(user){
-      if(this.score > user.highscore){
+      //remplacer userdata.highScore par getHighScore(username)
+      //qui renvoie le meilleur score du username
+      if(this.score > this.getSetHighscore(user)){
         changerHighscore(this.score);
       }
     }
   }
-
   changerHighscore(score){
     try{
       const options = {
@@ -200,7 +225,6 @@ class GameScene extends Phaser.Scene {
           "Content-Type": "application/json",
         },
       };
-
       const response = fetch(`/api/auths/user/${user.username}`, options); // fetch return a promise => we wait for the response
       if(!response.ok){
         throw new Error(
@@ -214,18 +238,13 @@ class GameScene extends Phaser.Scene {
     user.highscore = score;
     console.log("user after update : ", user);
   }
-
-
   velocityPlayer(){
     this.player.body.velocity.setTo(0,0);
-
     if (this.cursors.left.isDown) {
       this.player.setVelocityX(-300);
-
     } 
     if (this.cursors.right.isDown) {
       this.player.setVelocityX(300);
-
     } 
     if(this.cursors.up.isDown){
       this.player.setVelocityY(-300);        
@@ -239,19 +258,16 @@ class GameScene extends Phaser.Scene {
       this.player.body.setVelocityX(-250);
       this.player.body.setVelocityY(-250);
     }
-
     // Up and right
     if (this.cursors.right.isDown && this.cursors.up.isDown){
       this.player.body.setVelocityX(250);
       this.player.body.setVelocityY(-250);
     }
-
     // Down and right
     if (this.cursors.right.isDown && this.cursors.down.isDown){
       this.player.body.setVelocityX(250);
       this.player.body.setVelocityY(250);
     }
-
     // Down and left
     if (this.cursors.left.isDown && this.cursors.down.isDown){
       this.player.body.setVelocityX(-250);
@@ -262,9 +278,6 @@ class GameScene extends Phaser.Scene {
       this.shootLaser();
     } 
   }
-
-
-
   clickPauseButton(){
     this.buttonSound.play();
     /*
@@ -277,7 +290,6 @@ class GameScene extends Phaser.Scene {
     //this.scene.launch('options-scene');
     
 }
-
   //Handle the collision between laser and enemy
   collisionHandler(laser,enemy){
     const explosion = this.createExplosion(enemy.x,enemy.y);
@@ -292,7 +304,6 @@ class GameScene extends Phaser.Scene {
     this.scoreLabel.add(10);
     this.explosionSound.play();
   }
-
   //boss enter scene
   enterScene(){
     
@@ -306,7 +317,6 @@ class GameScene extends Phaser.Scene {
     
     return anim;
   }
-
   //Detect if player get hit by enemy
   playerHit(player,enemy){
     const explosion = this.createExplosion(enemy.x,enemy.y);
@@ -331,8 +341,6 @@ class GameScene extends Phaser.Scene {
       
     }
   }
-
-
   //Create and add player sprite
   createPlayer() {
     const player = this.physics.add.sprite(355,450,PLAYER_KEY);
@@ -340,7 +348,6 @@ class GameScene extends Phaser.Scene {
     player.body.collideWorldBounds=true;
     return player;
   }
-
   //player shoot
   shootLaser(){
   
@@ -350,11 +357,8 @@ class GameScene extends Phaser.Scene {
       this.bulletTime = this.time.now + 250;
     }
   
-
   }
   
-
-
   //enemy shoot
   enemyShoot(enemy,x,y){
     if(this.time.now > this.enemyBulletTime){
@@ -365,7 +369,6 @@ class GameScene extends Phaser.Scene {
       this.enemyBulletTime = this.time.now + 1500;
     }
   }
-
   bossShoot(x,y,posX,posY){
     if(this.time.now > this.bossBulletTime){
       let distance = Math.sqrt((posX-x)**2+(posY-y)**2);
@@ -375,7 +378,6 @@ class GameScene extends Phaser.Scene {
       this.enemyBulletTime = this.time.now + 1000;
     }
   }
-
   //Detect if the boss hit by laser
   bossHit(laser,boss){
     laser.destroy();
@@ -396,27 +398,22 @@ class GameScene extends Phaser.Scene {
       this.scoreLabel.add(50);
     }
   
-
   }
   
-
   //Score
   createScoreLabel(x, y, score) {
     const style = { fontSize: "32px", fill: "#FFFFFF" };
     const label = new ScoreLabel(this, x, y, score, style);
     console.log("score:", label);
     this.add.existing(label);
-
     return label;
   }
-
   //Lives
   createLiveLabel(x, y, live) {
     const style = { fontSize: "32px", fill: "#FFFFFF" };
     const label = new LiveLabel(this, x, y, live, style);
     console.log("score:", label);
     this.add.existing(label);
-
     return label;
   }
   
@@ -434,3 +431,4 @@ class GameScene extends Phaser.Scene {
 }
 
 export default GameScene;
+
