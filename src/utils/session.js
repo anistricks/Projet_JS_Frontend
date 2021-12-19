@@ -1,4 +1,5 @@
-const STORE_NAME = "user";
+//const STORE_NAME = "user";
+const storeName = "user";
 
 /**
  * Get the Object that is in the localStorage under the storeName key

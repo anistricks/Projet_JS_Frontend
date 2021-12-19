@@ -22,7 +22,8 @@ import musicAsset from "../../assets/music.mp3";
 import pauseButtonAsset from "../../assets/buttonPause.png";
 import buttonSoundAsset from "../../assets/buttonSound.mp3";
 
-import { getSessionObject } from "../../utils/session";
+import { getSessionObject, setSessionObject } from "../../utils/session";
+
 
 
 class GameScene extends Phaser.Scene {
@@ -115,7 +116,8 @@ class GameScene extends Phaser.Scene {
       this.spawner.remove(false);*/
       var score = this.scoreLabel.getScore();
       //this.Sethighscore(score);
-      console.log(this.getSetHighscore(getSessionObject('user'), score));
+    
+      this.getSetHighscore(getSessionObject('user'), score);
       this.scene.stop;
       this.scene.start('end-scene', {score: score});
       this.gameOver = false;
@@ -123,22 +125,50 @@ class GameScene extends Phaser.Scene {
       //return;
     }
     this.velocityPlayer();
-   
-
   }
 
   Sethighscore(score){
     let user = getSessionObject('user');
+    let userHighScore = this.getHighScore(user);
+    
+    //condition ---> if(user)
     if(true){
-      if(score > user.highscore){
+      //remplacer userdata.highScore par getHighScore(username)
+      //qui renvoie le meilleur score du username
+      console.log(userHighScore)
+      if(score > userHighScore){
         console.log(666);
         this.getSetHighscore(user, score);
+        //setSessionObject('user', {highScore: score})
       }
     }
   }
 
-  
 
+  // pour récuper un highscore : se baser sur comment on a récupérer les données d'un user sur LeaderboardPage.js
+  getHighScore(username) {
+    let toReturn = "";
+    console.log("fetch for user : "+username)
+    fetch("/api/auths/user", {
+        method: "POST", 
+        body: JSON.stringify({username: username}), 
+        headers: {
+            Authorization: username.token,
+            "Content-Type": "application/json",
+        },
+    })
+    .then((response) => {
+        if (!response.ok)
+            throw new Error("Error code : " + response.status + " : " + response.statusText);
+            
+        return response.json();
+    })
+    .catch((err) => console.log(err.message));
+    
+    return toReturn;
+}
+  
+// fonctionne 
 async getSetHighscore  (user, highScore) {
         let toReturn = "";
         await fetch("/api/auths/score", {
