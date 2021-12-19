@@ -148,15 +148,6 @@ class GameScene extends Phaser.Scene {
       console.log(score);
      
      // this.Sethighscore();
-=======
-
-      console.log(score);
-      //this.Sethighscore(score);
-
-    
-      this.getSetHighscore(getSessionObject('user'), score);
-
->>>>>>> aa5d77b7e13eea477724c85305c5aa98e4540b70
       this.scene.stop;
       this.scene.start('end-scene', {score: score});
       this.gameOver = false;
@@ -192,28 +183,13 @@ class GameScene extends Phaser.Scene {
 
   Sethighscore(){
     let user = getSessionObject('user');
-<<<<<<< HEAD
     if(user){
       if(this.score > user.highscore){
         changerHighscore(this.score);
-=======
-    let userHighScore = this.getHighScore(user);
-    
-    //condition ---> if(user)
-    if(true){
-      //remplacer userdata.highScore par getHighScore(username)
-      //qui renvoie le meilleur score du username
-      console.log(userHighScore)
-      if(score > userHighScore){
-        console.log(666);
-        this.getSetHighscore(user, score);
-        //setSessionObject('user', {highScore: score})
->>>>>>> aa5d77b7e13eea477724c85305c5aa98e4540b70
       }
     }
   }
 
-<<<<<<< HEAD
   changerHighscore(score){
     try{
       const options = {
@@ -234,51 +210,8 @@ class GameScene extends Phaser.Scene {
       }
     }catch(error){
       console.error("error : ", error);
-=======
-
-  // pour récuper un highscore : se baser sur comment on a récupérer les données d'un user sur LeaderboardPage.js
-  getHighScore(username) {
-    let toReturn = "";
-    console.log("fetch for user : "+username)
-    fetch("/api/auths/user", {
-        method: "POST", 
-        body: JSON.stringify({username: username}), 
-        headers: {
-            Authorization: username.token,
-            "Content-Type": "application/json",
-        },
-    })
-    .then((response) => {
-        if (!response.ok)
-            throw new Error("Error code : " + response.status + " : " + response.statusText);
-            
-        return response.json();
-    })
-    .catch((err) => console.log(err.message));
     
-    return toReturn;
 }
-  
-// fonctionne 
-async getSetHighscore  (user, highScore) {
-        let toReturn = "";
-        await fetch("/api/auths/score", {
-            method: "POST", 
-            body: JSON.stringify({username: user.username, highScore: highScore}), 
-            headers: {
-                Authorization: user.token,
-                "Content-Type": "application/json",
-            },
-        })
-        .then((response) => {
-            if (!response.ok)
-                throw new Error("Error code : " + response.status + " : " + response.statusText);
-            return response.json();
-        })
-        .catch((err) => console.log(err.message));
-        return toReturn;
->>>>>>> aa5d77b7e13eea477724c85305c5aa98e4540b70
-    }
     user.highscore = score;
     console.log("user after update : ", user);
   }
