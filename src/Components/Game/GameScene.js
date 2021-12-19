@@ -144,7 +144,6 @@ class GameScene extends Phaser.Scene {
       this.player.destroy();
       this.spawner.remove(false);*/
       var score = this.scoreLabel.getScore();
-<<<<<<< HEAD
       console.log(score);
      
      // this.Sethighscore();
