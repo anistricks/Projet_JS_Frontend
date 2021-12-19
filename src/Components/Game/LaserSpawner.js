@@ -15,18 +15,24 @@ export default class LaserSpawner {
     return this._group;
   }
 
-    shoot(x,y) {
+  shoot(x,y,vel) {
     const laser = this.group.create(x,y,this.key);
-    laser.setVelocityY(-600);
+    laser.setVelocityY(vel);
     
     return laser; 
+  }
+  enemyShoot(x,y,posX,posY){
+    const laser = this.group.create(posX,posY,this.key);
+    laser.setVelocity(x,y);
+
+    return laser;
   }
   preUpdate(time, delta){
     super.preUpdate(time, delta);
     if(this.y >= 600){
         this.setActive(false);
         this.setVisible(false);
-        this._group.destroy();
+     
     }
 }
 }

@@ -17,10 +17,13 @@ export default class EnemySpawner {
 
   spawn(x,y) {
     const enemy = this.group.create(x,y,this.key);
-    enemy.setVelocityY(300);
+    enemy.setVelocityY(250);
     
     return enemy; 
   }
+
+
+
   preUpdate(time, delta){
     super.preUpdate(time, delta);
     if(this.y >= 600){
